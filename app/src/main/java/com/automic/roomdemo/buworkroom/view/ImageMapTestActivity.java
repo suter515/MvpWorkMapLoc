@@ -16,103 +16,97 @@
 
 package com.automic.roomdemo.buworkroom.view;
 
-import android.app.Activity;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.automic.roomdemo.R;
-import com.automic.roomdemo.application.AppContext;
-import com.automic.roomdemo.baseparts.dao.EmployeesWorkStationDao;
-import com.automic.roomdemo.buworkroom.bean.EmployeesWorkStation;
-import com.automic.roomdemo.buworkroom.model.ExtraDbManager;
+import com.automic.roomdemo.baseparts.BaseMvpActivity;
+import com.automic.roomdemo.buworkroom.presenter.WorkRoomPresenterImpl;
 
-import java.util.List;
 
-public class ImageMapTestActivity extends Activity implements View.OnClickListener{
+public class ImageMapTestActivity extends BaseMvpActivity<WorkRoomView, WorkRoomPresenterImpl> implements WorkRoomView, View.OnClickListener {
     ImageMap mImageMap;
-    private List<EmployeesWorkStation> mList;
-    private EditText edtSearch;
+
+    private EditText edtName;
     private Button btnSearch;
+    private EditText edtSex;
+    private Button btnCancle;
+    private RelativeLayout rlSearchMap;
+    private ImageButton imgbtnSearch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_view);
-        edtSearch = (EditText) findViewById(R.id.edt_search);
+        setContentView(R.layout.activity_image_map);
+        //搜索视图
+        rlSearchMap = (RelativeLayout)findViewById(R.id.rl_search_map);
+        edtName = (EditText) findViewById(R.id.edt_name);
+        edtSex = (EditText) findViewById(R.id.edt_sex);
+        imgbtnSearch = (ImageButton)findViewById(R.id.imgbtn_search);
+        imgbtnSearch.setOnClickListener(this);
+        btnCancle=(Button)findViewById(R.id.btn_cancle);
+        btnCancle.setOnClickListener(this);
         btnSearch = (Button) findViewById(R.id.btn_search);
         btnSearch.setOnClickListener(this);
         mImageMap = (ImageMap) findViewById(R.id.map);
-        //initMap();
-        //manager自动读取数据到数据库
-        ExtraDbManager manager = ExtraDbManager.getmDbManager(this);
+        mImageMap.setImageResource(R.drawable.automic2);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initMap();
-    }
-
-    private void initMap() {
-        //mImageMap.setImageResource(R.drawable.usamap);
-        mImageMap.setImageResource(R.drawable.automic2);
-
-        // add a click handler to react when areas are tapped
-        mImageMap.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
-            @Override
-            public void onImageMapClicked(int id, ImageMap imageMap) {
-                String areaCode = mImageMap.getAreaCodeById(id);
-                mList = AppContext.getDaoInstant().getEmployeesWorkStationDao().queryBuilder().where(EmployeesWorkStationDao.Properties.WorkStaionId.eq(areaCode)).list();
-                if (mList.size() != 0) {
-                    String content = " " + mList.get(0).getName() + " \n " + mList.get(0).getSection();
-                    mImageMap.showBubble(id, content);
-                } else
-
-
-                    // when the area is tapped, show the name in a
-                    // text bubble
-                    mImageMap.showBubble(id);
-            }
-
-            @Override
-            public void onBubbleClicked(int id) {
-                Toast.makeText(ImageMapTestActivity.this, "hahah" + id, Toast.LENGTH_LONG);
-                // react to info bubble for area being tapped
-            }
-        });
+        presenter.initmap(mImageMap);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
+    public WorkRoomPresenterImpl initPresenter() {
+        presenter = new WorkRoomPresenterImpl(ImageMapTestActivity.this, this);
+        return presenter;
     }
+
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_search:
-                if (edtSearch.getText().toString()!=null){
-                    queryMan(edtSearch.getText().toString());
+                if (edtName.getText().toString() != null) {
+                    presenter.searchPeople(edtName.getText().toString());
                 }
-
+                rlSearchMap.setVisibility(View.GONE);
+                imgbtnSearch.setVisibility(View.VISIBLE);
                 break;
-
+            case R.id.imgbtn_search:
+                rlSearchMap.setVisibility(View.VISIBLE);
+                imgbtnSearch.setVisibility(View.GONE);
+                break;
+            case R.id.btn_cancle:
+                rlSearchMap.setVisibility(View.GONE);
+                imgbtnSearch.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
-    private void queryMan(String text) {
-        mList = AppContext.getDaoInstant().getEmployeesWorkStationDao().queryBuilder().where(EmployeesWorkStationDao.Properties.Name.like(text)).list();
-        if (mList.size() != 0) {
-            String content = " " + mList.get(0).getName() + " \n " + mList.get(0).getSection()+" \n"+mList.get(0).getWorkStaionId();
-            Log.e("sjt","shuju==="+content);
-           // mImageMap.showBubble(id, content);
-            //拿到name，从xml解析，然后，查到coods，再绘制
-        }
+
+    @Override
+    public void showDialog(String message) {
+
     }
+
+    @Override
+    public void showMapInfo(int id, String content) {
+        mImageMap.showBubble(id, content);
+    }
+
+    @Override
+    public void showMapInfo(int id) {
+        mImageMap.showBubble(id);
+    }
+
+
 }

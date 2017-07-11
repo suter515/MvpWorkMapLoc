@@ -36,7 +36,7 @@ import java.lang.reflect.Type;
  */
 
 
-public class NewBasePresenter<T extends BaseView> {
+public class NewBasePresenter<T> {
     /**
      * Null Mvp View InvocationHandler
      */

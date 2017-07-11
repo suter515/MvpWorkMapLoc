@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.automic.roomdemo.R;
 import com.automic.roomdemo.baseparts.BaseMvpActivity;
+import com.automic.roomdemo.baseparts.BaseMvpNetActivity;
 import com.automic.roomdemo.buraininfo.bean.HStationRainHistory;
 import com.automic.roomdemo.buraininfo.presenter.RainHistoryPresenterImpl;
 import com.automic.roomdemo.utils.ToastUtils;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * 业务一的主页面
  */
-public class BusinessOneActivity extends BaseMvpActivity<RainHistoryMvpView, RainHistoryPresenterImpl> implements RainHistoryMvpView, AdapterView.OnItemClickListener {
+public class BusinessOneActivity extends BaseMvpNetActivity<RainHistoryMvpView, RainHistoryPresenterImpl> implements RainHistoryMvpView, AdapterView.OnItemClickListener {
 
     private ListView mvpListView;
     private ProgressBar pb;

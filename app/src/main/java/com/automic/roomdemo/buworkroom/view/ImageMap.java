@@ -1665,9 +1665,9 @@ public class ImageMap extends ImageView {
                 l = _left + mScrollLeft;
                 t = _top + mScrollTop;
                 canvas.drawRoundRect(new RectF(l, t, l + _w, t + _h), 20.0f, 20.0f, bubblePaint);
-                int a = 1;
+                int a = 50;//方形区域的边长
                 bubblePaint.setColor(Color.RED);
-                canvas.drawRect(new Rect((int) _x, (int) _y, (int) _x + 30, (int) _y + 30), bubblePaint);
+                canvas.drawRect(new Rect((int) _x, (int) _y, (int) _x + a, (int) _y + a), bubblePaint);
                 bubblePaint.setColor(0xFFFFFFFF);
                 path = new Path();
                 ox = _x + mScrollLeft;
