@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.automic.roomdemo.baseparts.dao.DaoMaster;
 import com.automic.roomdemo.baseparts.dao.DaoSession;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.xutils.BuildConfig;
 import org.xutils.x;
@@ -23,13 +22,6 @@ public class AppContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
-        //
         mInstance=this;
 //        JPushInterface.setDebugMode(true);
 //        JPushInterface.init(this);

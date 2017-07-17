@@ -42,11 +42,6 @@ dependencies {
     //ORM数据库
     compile 'org.greenrobot:greendao:3.2.2'
     compile'org.greenrobot:greendao-generator:3.0.0'
-    //LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-
     testCompile 'junit:junit:4.12'
     compile project(':pickerview')
 }
